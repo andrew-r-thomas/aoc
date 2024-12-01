@@ -1,13 +1,15 @@
 cmake_minimum_required(VERSION 3.13...3.27)
 
-include(pico-sdk/pico_sdk_init.cmake)
+set(PICO_SDK_FETCH_FROM_GIT on)
+
+include(pico_sdk_import.cmake)
 
 project(aoc_2024)
 
 pico_sdk_init()
 
+# TODO: make this easy to write a command for to build different days
 add_executable(aoc_2024
-	# TODO: make this easy to write a command for to build different days
 	solutions/test.c
 )
 
