@@ -1,3 +1,8 @@
+/*
+ just put the lines in an array and do stuff that way,
+ need to do some more complete checking for the removal stuff
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -8,9 +13,50 @@ enum DIRECTION
 	initial,
 };
 
+int check_safe(int prev, int current, enum DIRECTION *dir)
+{
+	if (!(prev == 0))
+	{
+		// check diff
+		int diff = abs(current - prev);
+		if (diff < 1 || diff > 3)
+		{
+			return 0;
+		}
+
+		// check asc/dec
+		switch (*dir)
+		{
+			case initial:
+				if (current < prev) *dir = decreasing;
+				else if (current > prev) *dir = increasing;
+				else
+				{
+					return 0;
+				}
+				break;
+			case increasing:
+				if (!(current > prev))
+				{
+					return 0;
+				}
+				break;
+			case decreasing:
+				if (!(current < prev))
+				{
+					return 0;
+				}
+				break;
+		}
+	}
+
+	return 1;
+}
+
 int line_is_safe(char line[])
 {
 	int safe = 1;
+	int first = 1;
 
 	enum DIRECTION dir = initial;
 	int prev = 0;
@@ -19,59 +65,28 @@ int line_is_safe(char line[])
 	int looping = 1;
 	while (looping)
 	{
+		int s;
 		char c = line[i];
 		int digit;
 		switch (c) {
 		case ' ':
-			if (!(prev == 0))
+			s = check_safe(prev, current, &dir);
+			if (first == 1 && s == 0)
 			{
-				// check diff
-				int diff = abs(current - prev);
-				if (diff < 1 || diff > 3)
-				{
-					looping = 0;
-					safe = 0;
-					break;
-				}
-
-				// check asc/dec
-				switch (dir)
-				{
-					case initial:
-						if (current < prev)
-						{
-							dir = decreasing;
-						}
-						else if (current > prev)
-						{
-							dir = increasing;
-						}
-						else
-						{
-							looping = 0;
-							safe = 0;
-						}
-						break;
-					case increasing:
-						if (!(current > prev))
-						{
-							looping = 0;
-							safe = 0;
-						}
-						break;
-					case decreasing:
-						if (!(current < prev))
-						{
-							looping = 0;
-							safe = 0;
-						}
-						break;
-				}
+				first = 0;
+			}
+			else
+			{
+				looping = s;
+				safe = s;
 			}
 			prev = current;
 			current = 0;
 			break;
 		case '\n':
+			// maybe need to add first check here
+			s = check_safe(prev, current, &dir);
+			safe = s;
 			looping = 0;
 			break;
 		default:
@@ -87,11 +102,11 @@ int line_is_safe(char line[])
 	return safe;
 }
 
-#define LINES 1000
+#define LINES 6
 
 int main(void)
 {
-	FILE *f = fopen("data/2.txt", "r");
+	FILE *f = fopen("../data/2.txt", "r");
 
 	int answer = 0;
 	for (int i = 0; i < LINES; i++)

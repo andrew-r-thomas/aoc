@@ -1,0 +1,9 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/andrewthomas/dev/personal/aoc/2024/solutions/2'
+relocations:
+  - { offsetInCU: 0x26, offset: 0x26, size: 0x8, addend: 0x0, symName: _check_safe, symObjAddr: 0x0, symBinAddr: 0x100003B2C, symSize: 0x178 }
+  - { offsetInCU: 0x67, offset: 0x67, size: 0x8, addend: 0x0, symName: _check_safe, symObjAddr: 0x0, symBinAddr: 0x100003B2C, symSize: 0x178 }
+  - { offsetInCU: 0xC7, offset: 0xC7, size: 0x8, addend: 0x0, symName: _line_is_safe, symObjAddr: 0x178, symBinAddr: 0x100003CA4, symSize: 0x168 }
+  - { offsetInCU: 0x189, offset: 0x189, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x2E0, symBinAddr: 0x100003E0C, symSize: 0x140 }
+...
