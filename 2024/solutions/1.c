@@ -43,8 +43,28 @@ void sort(int arr[], int low, int high) {
     }
 }
 
-#define LINES 6
-#define LINE_LEN 6
+// assumes arr is sorted in ascending order
+int count_occurences(int arr[], int target)
+{
+	int count = 0;
+
+	int i = 0;
+	while (1)
+	{
+		if (arr[i] < target) i++;
+		else if (arr[i] > target) break;
+		else
+		{
+			count++;
+			i++;
+		}
+	}
+
+	return count;
+}
+
+#define LINES 1000
+#define LINE_LEN 14
 
 int main(void)
 {
@@ -59,18 +79,15 @@ int main(void)
 		char buff[LINE_LEN + 1] = {0};
 		fread(&buff, 1, LINE_LEN, f);
 
-		// char l_str[6] = {0};
-		// char r_str[6] = {0};
-		// for (int i = 0; i < 6; i++)
-		// {
-		// 	l_str[i] = buff[i];
-		// 	r_str[i] = buff[i + 8];
-		// }
-		// int l_num = atoi(l_str);
-		// int r_num = atoi(r_str);
-
-		int l_num = buff[0] - '0';
-		int r_num = buff[4] - '0';
+		char l_str[6] = {0};
+		char r_str[6] = {0};
+		for (int i = 0; i < 6; i++)
+		{
+			l_str[i] = buff[i];
+			r_str[i] = buff[i + 8];
+		}
+		int l_num = atoi(l_str);
+		int r_num = atoi(r_str);
 
 		l[i] = l_num;
 		r[i] = r_num;
@@ -81,9 +98,6 @@ int main(void)
 
 	int answer = 0;
 
-	int r_num = 0;
-	int r_tot = 0;
-	int r_idx = 0;
 	for (int i = 0; i < LINES; i++)
 	{
 		// part 1 answer
@@ -91,16 +105,7 @@ int main(void)
 
 		// part 2 answer
 		int check = l[i];
-		if (check != r_num)
-		{
-			while (check == r[r_idx])
-			{
-				r_num = r[r_idx];
-				r_tot++;
-				r_idx++;
-			}
-		}
-		answer += check * r_tot;
+		answer += check * count_occurences(r, check);
 	}
 
 	printf("answer: %d\n", answer);
