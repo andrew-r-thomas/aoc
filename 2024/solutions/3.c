@@ -55,6 +55,33 @@ void parse_mul(char **in, int *answer)
 	}
 }
 
+void parse_cond(char **in, int *d)
+{
+	if ((*in)[0] != 'd' || (*in)[1] != 'o')
+	{
+		(*in)++;
+		return;
+	}
+
+	if ((*in)[2] == '(' && (*in)[3] == ')')
+	{
+		(*d) = 1;
+		(*in) += 4;
+		return;
+	}
+	else if ((*in)[2] == 'n' && (*in)[3] == '\'' && (*in)[4] == 't' && (*in)[5] == '(' && (*in)[6] == ')')
+	{
+		(*d) = 0;
+		(*in) += 7;
+		return;
+	}
+	else
+	{
+		(*in)++;
+		return;
+	}
+}
+
 int main()
 {
 	FILE *f = fopen("data/3.txt", "r");
@@ -68,6 +95,7 @@ int main()
 	fread(input, 8, filesize, f);
 
 	int answer = 0;
+	int d = 1;
 
 	while (1)
 	{
@@ -75,7 +103,11 @@ int main()
 
 		switch (current) {
 		case 'm':
-			parse_mul(&input, &answer);
+			if (d) parse_mul(&input, &answer);
+			else input++;
+			break;
+		case 'd':
+			parse_cond(&input, &d);
 			break;
 		case 0:
 			printf("answer is %d\n", answer);
